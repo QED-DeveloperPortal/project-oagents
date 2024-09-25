@@ -46,22 +46,29 @@ public class GithubAuthService
     
     public GitHubClient GetGitHubClient()
     {
+        var x = "1";
         try
         {
             var jwtToken = GenerateJwtToken(_githubSettings.AppId.ToString(), _githubSettings.AppKey, 10);
+            x = "2";
             var appClient = new GitHubClient(new ProductHeaderValue("SK-DEV-APP"))
             {
                 Credentials = new Credentials(jwtToken, AuthenticationType.Bearer)
             };
+            x = "3";
+            _logger.LogInformation($"LOGGING INSTALLATIONID");
+            _logger.LogInformation($"InstallationId: {_githubSettings.InstallationId}");
             var response = appClient.GitHubApps.CreateInstallationToken(_githubSettings.InstallationId).Result;
+            x = "4";
             return new GitHubClient(new ProductHeaderValue($"SK-DEV-APP-Installation{_githubSettings.InstallationId}"))
             {
                 Credentials = new Credentials(response.Token)
             };
+            x = "5";
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting GitHub client");
+            _logger.LogError(ex, $"Error getting GitHub client {x}");
              throw;
         }
     }

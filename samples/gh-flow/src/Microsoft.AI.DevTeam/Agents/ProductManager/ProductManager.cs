@@ -58,16 +58,20 @@ public class ProductManager : AiAgent<ProductManagerState>, IManageProducts
 
     public async Task<string> CreateReadme(string ask)
     {
+        var x = 0;
         try
         {
             var context = new KernelArguments { ["input"] = AppendChatHistory(ask)};
+            x = 1;
             var instruction = "Consider the following architectural guidelines:!waf!";
+            x = 2;
             var enhancedContext = await AddKnowledge(instruction, "waf",context);
+            x = 3;
             return await CallFunction(PMSkills.Readme, enhancedContext);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error creating readme");
+            _logger.LogError(ex, $"Error creating readme {x}");
             return default;
         }
     }

@@ -171,6 +171,7 @@ public class GithubService : IManageGithub
     {
         try
         {
+            _logger.LogInformation($"ORG: {org}, REPO: {repo}, ISSUENUMBER: {issueNumber}, COMMENT: {comment}");
             await _ghClient.Issue.Comment.Create(org, repo, (int)issueNumber, comment);
         }
         catch (Exception ex)
