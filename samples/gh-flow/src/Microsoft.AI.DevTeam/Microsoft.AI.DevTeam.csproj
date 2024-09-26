@@ -10,14 +10,20 @@
     <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
     <UserSecretsId>c073c86e-8483-4956-942f-331fd09172d4</UserSecretsId>
     <AnalysisMode>All</AnalysisMode>
+     <NoWarn>SKEXP0026</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Octokit.Webhooks.AspNetCore" Version="2.0.3" />
     <PackageReference Include="Octokit" Version="12.0.0" />
+    <PackageReference Include="Microsoft.KernelMemory.Abstractions" Version="0.75.240924.1" />
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.10.0" />
-    <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.10.0-alpha" />
-    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Memory" Version="1.10.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.5.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.5.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Memory" Version="1.5.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.MsGraph" Version="1.5.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.OpenApi" Version="1.5.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Web" Version="1.5.0-alpha" />
 
     <PackageReference Include="Microsoft.Orleans.Server" Version="8.1.0" />
     <PackageReference Include="Microsoft.Orleans.Sdk" Version="8.1.0" />
@@ -41,7 +47,6 @@
     <PackageReference Include="Azure.Identity" Version="1.11.0-beta.1" />
    
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.4.1" />
-        
   </ItemGroup>
 
   <ItemGroup>

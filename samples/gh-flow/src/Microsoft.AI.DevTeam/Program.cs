@@ -13,6 +13,9 @@ using Microsoft.SemanticKernel.Memory;
 using Microsoft.SemanticKernel.Connectors.Qdrant;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Orleans.Configuration;
+
+using Microsoft.AI.DevTeam.Extensions;
+
 using Orleans.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
