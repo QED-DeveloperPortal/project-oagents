@@ -24,6 +24,11 @@ builder.Services.AddTransient(CreateKernel);
 builder.Services.AddTransient(CreateMemory);
 builder.Services.AddHttpClient();
 
+//builder.Services.AddPlugins(builder.Configuration);
+
+// SemanticKernelExtensions.cs
+builder.AddSemanticKernelServices();
+
 
 builder.Services.AddTransient(s =>
 {

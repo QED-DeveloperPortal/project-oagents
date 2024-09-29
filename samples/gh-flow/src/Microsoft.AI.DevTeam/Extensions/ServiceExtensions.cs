@@ -20,8 +20,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 //using Microsoft.Identity.Web;
-using Microsoft.KernelMemory;
-using Microsoft.KernelMemory.Diagnostics;
+//using Microsoft.KernelMemory;
+//using Microsoft.KernelMemory.Diagnostics;
 
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
@@ -52,7 +52,7 @@ namespace Microsoft.AI.DevTeam.Extensions
                 var pluginManifestUrl = PluginUtils.GetPluginManifestUri(plugin.ManifestDomain);
                 using var request = new HttpRequestMessage(HttpMethod.Get, pluginManifestUrl);
                 // Need to set the user agent to avoid 403s from some sites.
-                request.Headers.Add("User-Agent", Telemetry.HttpUserAgent);
+                //request.Headers.Add("User-Agent", Telemetry.HttpUserAgent);
                 try
                 {
                     logger.LogInformation("Adding plugin: {0}.", plugin.Name);
