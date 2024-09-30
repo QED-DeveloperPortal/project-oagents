@@ -20,14 +20,15 @@ using Orleans.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<WebhookEventProcessor, GithubWebHookProcessor>();
-builder.Services.AddTransient(CreateKernel);
-builder.Services.AddTransient(CreateMemory);
-builder.Services.AddHttpClient();
 
-//builder.Services.AddPlugins(builder.Configuration);
+builder.Services.AddPlugins(builder.Configuration);
 
 // SemanticKernelExtensions.cs
 builder.AddSemanticKernelServices();
+
+builder.Services.AddTransient(CreateKernel);
+builder.Services.AddTransient(CreateMemory);
+builder.Services.AddHttpClient();
 
 
 builder.Services.AddTransient(s =>

@@ -92,18 +92,18 @@ internal static class SemanticKernelExtensions
     public static Kernel RegisterChatPlugin(this Kernel kernel, IServiceProvider sp)
     {
         // Chat plugin
-        // kernel.ImportPluginFromObject(
-        //     new ChatPlugin(
-        //         kernel,
-        //         memoryClient: sp.GetRequiredService<IKernelMemory>(),
-        //         chatMessageRepository: sp.GetRequiredService<ChatMessageRepository>(),
-        //         chatSessionRepository: sp.GetRequiredService<ChatSessionRepository>(),
-        //         messageRelayHubContext: sp.GetRequiredService<IHubContext<MessageRelayHub>>(),
-        //         promptOptions: sp.GetRequiredService<IOptions<PromptsOptions>>(),
-        //         documentImportOptions: sp.GetRequiredService<IOptions<DocumentMemoryOptions>>(),
-        //         contentSafety: sp.GetService<AzureContentSafety>(),
-        //         logger: sp.GetRequiredService<ILogger<ChatPlugin>>()),
-        //     nameof(ChatPlugin));
+        kernel.ImportPluginFromObject(
+            new ChatPlugin(
+                kernel,
+                memoryClient: sp.GetRequiredService<IKernelMemory>(),
+                chatMessageRepository: sp.GetRequiredService<ChatMessageRepository>(),
+                chatSessionRepository: sp.GetRequiredService<ChatSessionRepository>(),
+                messageRelayHubContext: sp.GetRequiredService<IHubContext<MessageRelayHub>>(),
+                promptOptions: sp.GetRequiredService<IOptions<PromptsOptions>>(),
+                documentImportOptions: sp.GetRequiredService<IOptions<DocumentMemoryOptions>>(),
+                contentSafety: sp.GetService<AzureContentSafety>(),
+                logger: sp.GetRequiredService<ILogger<ChatPlugin>>()),
+            nameof(ChatPlugin));
 
         return kernel;
     }

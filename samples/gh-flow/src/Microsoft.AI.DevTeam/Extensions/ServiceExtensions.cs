@@ -56,13 +56,15 @@ namespace Microsoft.AI.DevTeam.Extensions
                 try
                 {
                     logger.LogInformation("Adding plugin: {0}.", plugin.Name);
-                    // using var httpClient = new HttpClient();
-                    // var response = httpClient.SendAsync(request).Result;
-                    // if (!response.IsSuccessStatusCode)
-                    // {
-                    //     throw new InvalidOperationException($"Plugin '{plugin.Name}' at '{pluginManifestUrl}' returned status code '{response.StatusCode}'.");
-                    // }
-                    // validatedPlugins.Add(plugin.Name, plugin);
+                    
+                    //using var httpClient = new HttpClient();
+                    //var response = httpClient.SendAsync(request).Result;
+                    //if (!response.IsSuccessStatusCode)
+                    //{
+                    //    throw new InvalidOperationException($"Plugin '{plugin.Name}' at '{pluginManifestUrl}' returned status code '{response.StatusCode}'.");
+                    //}
+                    validatedPlugins.Add(plugin.Name, plugin);
+                    
                     logger.LogInformation("Added plugin: {0}.", plugin.Name);
                 }
                 catch (Exception ex) when (ex is InvalidOperationException || ex is AggregateException)
