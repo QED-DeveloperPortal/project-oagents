@@ -80,7 +80,7 @@ public class SemanticKernelSkill : CodeActivity<string>
             // load the skill
             var promptTemplate = SemanticFunctionConfig.ForSkillAndFunction(skillName, functionName);
 
-            var function = kernel.CreateFunctionFromPrompt(promptTemplate.PromptTemplate, new OpenAIPromptExecutionSettings { MaxTokens = 4096, Temperature = 0.4, TopP = 1 });
+            var function = kernel.CreateFunctionFromPrompt(promptTemplate.PromptTemplate, new OpenAIPromptExecutionSettings { MaxTokens = 4096, Temperature = 0.4, /*TopP = 1*/ });
 
             var arguments = new KernelArguments();
 

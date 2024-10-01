@@ -6,6 +6,8 @@ using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.Memory;
 using Orleans.Runtime;
 
+using Microsoft.AI.DevTeam.Utilities;
+
 namespace Microsoft.AI.DevTeam;
 
 [ImplicitStreamSubscription(Consts.MainNamespace)]
@@ -64,16 +66,41 @@ public class Dev : AiAgent<DeveloperState>, IDevelopApps
     {
         try
         {
+            _logger.LogInformation($"DEV CREATEPLAN PRELUDE {_kernel.Plugins.Count} {ConstantUtils.Messages.Count}");
+
+            foreach (var m in ConstantUtils.Messages)
+            {
+                _logger.LogInformation($"DEV CONSTANTUTILS.MESSAGES: {m}");
+            }
+
+            foreach (var p in _kernel.Plugins)
+            {
+                _logger.LogInformation($"DEV CREATEPLAN: {p.Name}");
+                _logger.LogInformation($"DEV CREATEPLAN Description: {p.Description}");
+                _logger.LogInformation($"DEV CREATEPLAN: {p.FunctionCount}");
+                _logger.LogInformation($"DEV CREATEPLAN: {p["get_app_catalog_groups"]}");
+                var f = p["get_app_catalog_groups"];
+                _logger.LogInformation($"DEV CREATEPLAN Function Description: {f.Description}");
+                _logger.LogInformation($"DEV CREATEPLAN Function Name: {f.Name}");
+                _logger.LogInformation($"DEV CREATEPLAN Function PluginName: {f.PluginName}");
+                // Currently returning null for f.Metadata and f.ExecutionSettings
+                // _logger.LogInformation($"DEV CREATEPLAN Function Description: {f.Metadata}");
+                // var es = f.ExecutionSettings;
+                // foreach (var setting in es)
+                //     _logger.LogInformation($"DEV CREATEPLAN Function Execution Setting: {setting.Key} Value: {setting.Value}");
+            }
+
             // TODO: ask the architect for the high level architecture as well as the files structure of the project
             var context = new KernelArguments { ["input"] = AppendChatHistory(ask) };
             var instruction = "Consider the following architectural guidelines:!waf!";
             var enhancedContext = await AddKnowledge(instruction, "waf", context);
-            var settings = new OpenAIPromptExecutionSettings{
-                 ResponseFormat = "json_object",
-                 MaxTokens = 32768, 
-                 Temperature = 0.4,
-                 TopP = 1 
-            };
+            //var settings = new OpenAIPromptExecutionSettings{
+                 //ResponseFormat = "json_object",
+            //     MaxTokens = 16384, //32768, 
+                 //Temperature = 0.4,
+                 //TopP = 1,
+            //     ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions
+            //};
             return await CallFunction(DeveloperSkills.Implement, enhancedContext);
         }
         catch (Exception ex)

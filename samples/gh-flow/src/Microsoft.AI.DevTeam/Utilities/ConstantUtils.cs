@@ -11,5 +11,7 @@ namespace Microsoft.AI.DevTeam.Utilities
     public static class ConstantUtils
     {
         public const string ApiBaseUrl = "https://dp-mockaco.azurewebsites.net/";
+
+        public static List<string> Messages = new List<string>();
     }
 }

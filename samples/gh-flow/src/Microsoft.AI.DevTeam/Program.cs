@@ -11,20 +11,38 @@ using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Http.Resilience;
 using Microsoft.SemanticKernel.Memory;
 using Microsoft.SemanticKernel.Connectors.Qdrant;
-using Microsoft.SemanticKernel.Connectors.OpenAI;
+using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
 using Orleans.Configuration;
+
+using Microsoft.AI.DevTeam.Plugins.Mockaco;
+
+using Microsoft.Extensions.DependencyInjection;
 
 using Microsoft.AI.DevTeam.Extensions;
 
 using Orleans.Serialization;
 
+using Microsoft.Extensions.Logging;
+
+using Microsoft.AI.DevTeam.Utilities;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<WebhookEventProcessor, GithubWebHookProcessor>();
+
+//builder.Services.AddPlugins(builder.Configuration);
+
+// using ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+// {
+//     builder.AddConsole();
+// });
+// ILogger logger = loggerFactory.CreateLogger("Program");
+// logger.LogDebug("ABOUT TO ADDFROMTYPE2");
+
+ConstantUtils.Messages.Add("ABOUT TO ADDTRANSIENT");
+
 builder.Services.AddTransient(CreateKernel);
 builder.Services.AddTransient(CreateMemory);
 builder.Services.AddHttpClient();
-
-//builder.Services.AddPlugins(builder.Configuration);
 
 // SemanticKernelExtensions.cs
 builder.AddSemanticKernelServices();
@@ -187,17 +205,30 @@ static ISemanticTextMemory CreateMemory(IServiceProvider provider)
 
     var memoryBuilder = new MemoryBuilder();
     return memoryBuilder.WithLoggerFactory(loggerFactory)
-                 .WithQdrantMemoryStore(qdrantConfig.Endpoint, qdrantConfig.VectorSize)
-                 .WithAzureOpenAITextEmbeddingGeneration(openAiConfig.EmbeddingDeploymentOrModelId, openAiConfig.Endpoint, openAiConfig.ApiKey)
-                 .Build();
+                .WithQdrantMemoryStore(qdrantConfig.Endpoint, qdrantConfig.VectorSize)
+                 //.WithAzureOpenAITextEmbeddingGeneration(openAiConfig.EmbeddingDeploymentOrModelId, openAiConfig.Endpoint, openAiConfig.ApiKey)
+                .WithTextEmbeddingGeneration(
+                   (loggerFactory, httpClient) =>
+                   {
+                       return new AzureOpenAITextEmbeddingGenerationService(
+                           openAiConfig.EmbeddingDeploymentOrModelId,
+                           openAiConfig.Endpoint,
+                           openAiConfig.ApiKey,
+                           httpClient: httpClient,
+                           loggerFactory: loggerFactory
+                       );
+                   }
+               )
+                .Build();
 }
 
 static Kernel CreateKernel(IServiceProvider provider)
 {
+    ConstantUtils.Messages.Add("CREATEKERNEL ADDFROMTYPE");
     var openAiConfig = provider.GetService<IOptions<OpenAIOptions>>().Value;
-    var clientOptions = new OpenAIClientOptions();
-    clientOptions.Retry.NetworkTimeout = TimeSpan.FromMinutes(5);
-    var openAIClient = new OpenAIClient(new Uri(openAiConfig.Endpoint), new AzureKeyCredential(openAiConfig.ApiKey), clientOptions);
+    var clientOptions = new AzureOpenAIClientOptions();
+    //clientOptions.Retry.NetworkTimeout = TimeSpan.FromMinutes(5);
+    var openAIClient = new AzureOpenAIClient(new Uri(openAiConfig.Endpoint), new AzureKeyCredential(openAiConfig.ApiKey), clientOptions);
     var builder = Kernel.CreateBuilder();
     builder.Services.AddLogging(c => c.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Debug));
     builder.Services.AddAzureOpenAIChatCompletion(openAiConfig.DeploymentOrModelId, openAIClient);
@@ -209,5 +240,24 @@ static Kernel CreateKernel(IServiceProvider provider)
             o.Retry.BackoffType = Polly.DelayBackoffType.Exponential;
         });
     });
-    return builder.Build();
+
+    //using ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+    //{
+    //    builder.AddConsole();
+    //});
+
+    //ILogger logger = loggerFactory.CreateLogger("Program");
+    //logger.LogDebug("ABOUT TO ADDFROMTYPE");
+    ConstantUtils.Messages.Add("ABOUT TO ADDFROMTYPE");
+    //var p = new MockacoPlugin();
+    builder.Plugins.AddFromType<MockacoPlugin>();
+    ConstantUtils.Messages.Add("ADDEDFROMTYPE");
+    //builder.Plugins.Add(p);
+    //Console.WriteLine("ADDFROMTYPE COMPLETED");
+    
+    var k = builder.Build();
+    //k.Plugins.AddFromType<MockacoPlugin>("Mockaco");
+
+    return k;
+    //return builder.Build();
 }

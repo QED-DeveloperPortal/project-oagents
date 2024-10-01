@@ -6,17 +6,21 @@ using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.Memory;
 using Orleans.Runtime;
 
+using Microsoft.AI.DevTeam.Utilities;
+
 namespace Microsoft.AI.DevTeam;
 [ImplicitStreamSubscription(Consts.MainNamespace)]
 public class DeveloperLead : AiAgent<DeveloperLeadState>, ILeadDevelopers
 {
     protected override string Namespace => Consts.MainNamespace;
     private readonly ILogger<DeveloperLead> _logger;
+    private readonly Kernel _kernel;
 
     public DeveloperLead([PersistentState("state", "messages")] IPersistentState<AgentState<DeveloperLeadState>> state, Kernel kernel, ISemanticTextMemory memory, ILogger<DeveloperLead> logger)
      : base(state, memory, kernel)
     {
         _logger = logger;
+        _kernel = kernel;
     }
 
     public async override Task HandleEvent(Event item)
@@ -63,14 +67,26 @@ public class DeveloperLead : AiAgent<DeveloperLeadState>, ILeadDevelopers
         {
             // TODO: Ask the architect for the existing high level architecture
             // as well as the file structure
+            _logger.LogInformation($"CREATEPLAN PRELUDE {_kernel.Plugins.Count} {ConstantUtils.Messages.Count}");
+
+            foreach (var m in ConstantUtils.Messages)
+            {
+                _logger.LogInformation($"CONSTANTUTILS.MESSAGES: {m}");
+            }
+
+            foreach (var p in _kernel.Plugins)
+            {
+                _logger.LogInformation($"CREATEPLAN: {p.Name}");
+            }
             var context = new KernelArguments { ["input"] = AppendChatHistory(ask) };
             var instruction = "Consider the following architectural guidelines:!waf!";
             var enhancedContext = await AddKnowledge(instruction, "waf", context);
             var settings = new OpenAIPromptExecutionSettings{
                  ResponseFormat = "json_object",
                  MaxTokens = 4096, 
-                 Temperature = 0.8,
-                 TopP = 1 
+                 //Temperature = 0.8,
+                 TopP = 1,
+                 ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions
             };
             return await CallFunction(DevLeadSkills.Plan, enhancedContext, settings);
         }
