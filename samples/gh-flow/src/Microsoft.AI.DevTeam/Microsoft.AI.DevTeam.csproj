@@ -14,15 +14,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Octokit.Webhooks.AspNetCore" Version="2.0.3" />
+    <!--<PackageReference Include="Octokit.Webhooks.AspNetCore" Version="2.0.3" />
     <PackageReference Include="Octokit" Version="12.0.0" />
     <PackageReference Include="Microsoft.KernelMemory.Abstractions" Version="0.30.240227.1" />
     <PackageReference Include="Microsoft.KernelMemory.Core" Version="0.30.240227.1" />
-    <!--<PackageReference Include="Microsoft.KernelMemory.Abstractions" Version="0.75.240924.1" />-->
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.10.0" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.10.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Memory" Version="1.10.0-alpha" />-->
+    
+    
+    <PackageReference Include="Octokit.Webhooks.AspNetCore" Version="2.0.3" />
+    <PackageReference Include="Octokit" Version="12.0.0" />
+    <PackageReference Include="Microsoft.KernelMemory.Abstractions" Version="0.76.240930.3" />
+    <PackageReference Include="Microsoft.KernelMemory.Core" Version="0.76.240930.3" />
+    <!--<PackageReference Include="Microsoft.KernelMemory.Abstractions" Version="0.75.240924.1" />-->
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.21.1" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureOpenAI" Version="1.21.1" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.Qdrant" Version="1.21.1-alpha" />
     <!--<PackageReference Include="Microsoft.SemanticKernel.Plugins.Core" Version="1.10.0-alpha" />-->
-    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Memory" Version="1.10.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Plugins.Memory" Version="1.21.1-alpha" />
     <!--<PackageReference Include="Microsoft.SemanticKernel.Plugins.MsGraph" Version="1.10.0-alpha" />
     <PackageReference Include="Microsoft.SemanticKernel.Plugins.OpenApi" Version="1.10.0-alpha" />
     <PackageReference Include="Microsoft.SemanticKernel.Plugins.Web" Version="1.10.0-alpha" />-->
@@ -46,9 +56,13 @@
     <PackageReference Include="Azure.ResourceManager.ContainerInstance" Version="1.2.0" />
     <PackageReference Include="Azure.Storage.Files.Shares" Version="12.16.0-beta.1" />
     <PackageReference Include="Azure.Data.Tables" Version="12.8.1" />
-    <PackageReference Include="Azure.Identity" Version="1.11.0-beta.1" />
+    <PackageReference Include="Azure.Identity" Version="1.12.1" />
    
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.4.1" />
+
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+ 
   </ItemGroup>
 
   <ItemGroup>

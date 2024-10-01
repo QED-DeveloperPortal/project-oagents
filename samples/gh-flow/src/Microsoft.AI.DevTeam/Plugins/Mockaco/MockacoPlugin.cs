@@ -20,7 +20,9 @@ namespace Microsoft.AI.DevTeam.Plugins.Mockaco
 {
     public sealed class MockacoPlugin
     {
-        [KernelFunction, Description("What groups or categories of APIs do we support")]
+        [KernelFunction("get_app_catalog_groups")]
+        [Description("What App Catalog groups of APIs do we support")]
+        [return: Description("List of App Catalog groups, also known as App Catalog categories")]
         public async static Task<List<AppCatGroup>> GetAppCatalogGroups()
         {
             using var response = await new HttpClient().GetAsync(new Uri($"{ConstantUtils.ApiBaseUrl}__getappcataloggroups"));
@@ -34,7 +36,9 @@ namespace Microsoft.AI.DevTeam.Plugins.Mockaco
         }
 
 
-        [KernelFunction, Description("What is the Group Name of an App Catalog Group")]
+        [KernelFunction("get_app_catalog_group_name")]
+        [Description("What is the Group Name of an App Catalog Group")]
+        [return: Description("Name of App Catalog group or category")]
         public async Task<string> GetAppCatalogGroupName(
             [Description("The Group Code")] string groupCode)
         {
@@ -55,7 +59,9 @@ namespace Microsoft.AI.DevTeam.Plugins.Mockaco
             return null;
         }
 
-        [KernelFunction, Description("What App Catalog Methods are supported for a given Group Code")]
+        [KernelFunction("get_app_catalog_methods")]
+        [Description("What App Catalog Methods are supported for a given Group Code")]
+        [return: Description("List of supported methods")]
         public async Task<List<AppCatalogMethod>> GetAppCatalogMethods(
             [Description("The Group Code")] string groupCode)
         {
@@ -79,7 +85,9 @@ namespace Microsoft.AI.DevTeam.Plugins.Mockaco
             return null;
         }
 
-        [KernelFunction, Description("Get details about an App Catalog Method")]
+        [KernelFunction("get_app_catalog_method")]
+        [Description("Get details about an App Catalog Method")]
+        [return: Description("Details of an App Catalog Method")]
         public async Task<AppCatalogMethod> GetAppCatalogMethod(
             [Description("The Group Code")] string groupCode,
             [Description("url path for the api call")] string id)
@@ -104,7 +112,9 @@ namespace Microsoft.AI.DevTeam.Plugins.Mockaco
             return null;
         }
 
-        [KernelFunction, Description("Get details about parameters for a method/function")]
+        [KernelFunction("get_method_parameters")]
+        [Description("Get details about parameters for a method/function")]
+        [return: Description("parameter details for a method/function")]
         public async Task<List<MethodParameter>> GetMethodParameters(
             [Description("The Group Code")] string groupCode,
             [Description("The Domain Name")] string domainName,
@@ -128,7 +138,9 @@ namespace Microsoft.AI.DevTeam.Plugins.Mockaco
             return null;
         }
 
-        [KernelFunction, Description("Example output for a method/function")]
+        [KernelFunction("get_method_example")]
+        [Description("Example output for a method/function")]
+        [return: Description("Example output for a method/function")]
         public async Task<string> GetMethodExample(
             [Description("The Group Code")] string groupCode,
             [Description("The Domain Name")] string domainName,

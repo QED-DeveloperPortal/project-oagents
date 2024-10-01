@@ -21,6 +21,8 @@ using Microsoft.SemanticKernel;
 //using Microsoft.SemanticKernel.Plugins.Core;
 //using Plugins;
 
+using Microsoft.AI.DevTeam.Utilities;
+
 using Microsoft.AI.DevTeam.Plugins.Mockaco;
 
 namespace Microsoft.AI.DevTeam.Extensions;
@@ -89,24 +91,24 @@ internal static class SemanticKernelExtensions
     /// <summary>
     /// Register the chat plugin with the kernel.
     /// </summary>
-    public static Kernel RegisterChatPlugin(this Kernel kernel, IServiceProvider sp)
-    {
-        // Chat plugin
-        kernel.ImportPluginFromObject(
-            new ChatPlugin(
-                kernel,
-                memoryClient: sp.GetRequiredService<IKernelMemory>(),
-                chatMessageRepository: sp.GetRequiredService<ChatMessageRepository>(),
-                chatSessionRepository: sp.GetRequiredService<ChatSessionRepository>(),
-                messageRelayHubContext: sp.GetRequiredService<IHubContext<MessageRelayHub>>(),
-                promptOptions: sp.GetRequiredService<IOptions<PromptsOptions>>(),
-                documentImportOptions: sp.GetRequiredService<IOptions<DocumentMemoryOptions>>(),
-                contentSafety: sp.GetService<AzureContentSafety>(),
-                logger: sp.GetRequiredService<ILogger<ChatPlugin>>()),
-            nameof(ChatPlugin));
+    // public static Kernel RegisterChatPlugin(this Kernel kernel, IServiceProvider sp)
+    // {
+    //     // Chat plugin
+    //     kernel.ImportPluginFromObject(
+    //         new ChatPlugin(
+    //             kernel,
+    //             memoryClient: sp.GetRequiredService<IKernelMemory>(),
+    //             chatMessageRepository: sp.GetRequiredService<ChatMessageRepository>(),
+    //             chatSessionRepository: sp.GetRequiredService<ChatSessionRepository>(),
+    //             messageRelayHubContext: sp.GetRequiredService<IHubContext<MessageRelayHub>>(),
+    //             promptOptions: sp.GetRequiredService<IOptions<PromptsOptions>>(),
+    //             documentImportOptions: sp.GetRequiredService<IOptions<DocumentMemoryOptions>>(),
+    //             contentSafety: sp.GetService<AzureContentSafety>(),
+    //             logger: sp.GetRequiredService<ILogger<ChatPlugin>>()),
+    //         nameof(ChatPlugin));
 
-        return kernel;
-    }
+    //     return kernel;
+    // }
 
     private static void InitializeKernelProvider(this WebApplicationBuilder builder)
     {
@@ -123,7 +125,9 @@ internal static class SemanticKernelExtensions
 
         // Time plugin
         //kernel.ImportPluginFromObject(new TimePlugin(), nameof(TimePlugin));
+        ConstantUtils.Messages.Add("PRE IMPORTPLUGINFROMOBJECT");
         kernel.ImportPluginFromObject(new MockacoPlugin(), nameof(MockacoPlugin));
+        ConstantUtils.Messages.Add("POST IMPORTPLUGINFROMOBJECT");
 
         return Task.CompletedTask;
     }

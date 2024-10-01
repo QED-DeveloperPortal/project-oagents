@@ -48,7 +48,7 @@ public abstract class AiAgent<T> : Agent, IAiAgent where T: class, new()
 
     public virtual async Task<string> CallFunction(string template, KernelArguments arguments, OpenAIPromptExecutionSettings? settings = null)
     {
-        var propmptSettings = (settings == null) ? new OpenAIPromptExecutionSettings { MaxTokens = 18000, Temperature = 0.8, TopP = 1 }
+        var propmptSettings = (settings == null) ? new OpenAIPromptExecutionSettings { MaxTokens = 18000, Temperature = 0.8, TopP = 1, ToolCallBehavior = ToolCallBehavior.AutoInvokeKernelFunctions }
                                                 : settings;
         var function = _kernel.CreateFunctionFromPrompt(template, propmptSettings);
         var result = (await _kernel.InvokeAsync(function, arguments)).ToString();
